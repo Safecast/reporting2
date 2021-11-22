@@ -1,6 +1,12 @@
 version: "3.8"
 
 services:
+  proxy:
+    ports:
+      - 8000:80
   grafana:
     volumes:
       - ../grafana-map-panel:/var/lib/grafana/plugins/grafana-map-panel
+      - ./data:/var/lib/grafana/data
+    environment:
+      - GF_PATHS_DATA=/var/lib/grafana/data

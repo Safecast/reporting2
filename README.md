@@ -6,7 +6,7 @@ A quilt of applications used for reporting in the [Safecast](https://safecast.or
 
 ### Grafana
 
-Hosted on-instance, available at https://grafana.safecast.cc.
+Hosted on-instance, available at https://grafana.safecast.cc
 
 ### Kibana
 
@@ -25,20 +25,21 @@ echo 'MYUSER:MYPASS' | base64 -i -
 
 Then copy that value into something like `.envrc.example`.
 
-Then up the conatiners:
+Then up the containers:
 
 ```
-> docker-compose up
+> docker compose up
 ```
 
-Then access the apps using a hostname that starts with grafana or kibana. For example:
+Then access the apps using a hostname. Current apps are:
 
-- https://grafana.127.0.0.1.nip.io:8000/
-- https://kibana.127.0.0.1.nip.io:8000/
-
-(or http to port 8000)
+- http://grafana.127.0.0.1.nip.io:8000/
+- http://kibana.127.0.0.1.nip.io:8000/
+- http://library.127.0.0.1.nip.io:8000/index
 
 Note that the grafana db comes up empty when running locally, so you'll need to configure data sources and dashboards if you want to do a thorough test.
+
+You'll likely want to steal info from https://grafana.safecast.cc/datasources/edit/1/ and https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes?orgId=1 for a decent test.
 
 ## Deployment
 
@@ -49,9 +50,3 @@ For example:
 ```
 > ./deploy.py same_env reporting dev reporting-master-208670495-e72e974414e7574d7d74271d50f42695959343c4
 ```
-
-## Ops
-
-ECS manages the containers on EC2, so the names that appear in `docker ps` aren't very ergonomic for bare docker commands.
-
-[z_docker.sh](profile.d/z_docker.sh) adds `dlog` and `dexec` helpers to check docker container output or exec into a container via partial string match.

@@ -1,9 +1,9 @@
-FROM grafana/grafana:7.5.2
+FROM grafana/grafana:7.5.11
 
 RUN grafana-cli plugins install petrslavotinek-carpetplot-panel && \
     grafana-cli plugins install grafana-googlesheets-datasource && \
     grafana-cli plugins install simpod-json-datasource && \
     grafana-cli plugins install dalvany-image-panel && \
     grafana-cli \
-      --pluginUrl https://github.com/matschaffer/worldmap-panel/releases/download/0.10.0-pre1/grafana-map-panel-0.10.0-pre1.zip \
+      --pluginUrl https://github.com/panodata/panodata-map-panel/releases/download/0.15.0/grafana-map-panel-0.15.0.zip \
       plugins install grafana-map-panel

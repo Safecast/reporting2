@@ -1,8 +1,5 @@
 version: "3.8"
 
-volumes:
-  grafana_data: {}
-
 services:
   proxy:
     image: nginx:1.19
@@ -10,28 +7,33 @@ services:
       - KIBANA_ENDPOINT=https://5bc3d4f7330a4459881197a85659caf5.us-west-2.aws.found.io:9243
       - KIBANA_BASIC_AUTH
     ports:
-      - 8000:80
-      - 8443:443
+      - 80:80
     volumes:
       - ./proxy/templates:/etc/nginx/templates
       - ./proxy/web:/usr/share/nginx/html
     depends_on:
       - grafana
       - library
+
   grafana:
     build:
       context: .
       dockerfile: Dockerfile.grafana
     volumes:
       - ./grafana:/etc/grafana
-      - grafana_data:/data
     environment:
-      GF_LOG_FILTERS: rendering:debug
-      GF_DATABASE_TYPE: sqlite3
-      GF_DATABASE_PATH: /data/grafana.db
+      - GF_DATABASE_TYPE
+      - GF_DATABASE_HOST
+      - GF_DATABASE_PASSWORD
+      - GF_AUTH_GITHUB_CLIENT_ID
+      - GF_AUTH_GITHUB_CLIENT_SECRET
+      - GF_ALERTING_EXECUTE_ALERTS
+      - GF_SERVER_ROOT_URL
+
   renderer:
-    image: grafana/grafana-image-renderer:2.0.0
-    environment:
-      ENABLE_METRICS: 'true'
+    image: grafana/grafana-image-renderer:3.3.0
+
   library:
     image: safecast/library:latest
+    environment:
+      - ELASTICSEARCH_HOST
