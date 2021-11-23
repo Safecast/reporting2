@@ -15,23 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set container details
-        run: |
-          cat <<VARS >>$GITHUB_ENV
-          REGISTRY=docker.pkg.github.com
-          REPOSITORY_BASE=$(echo "${{ github.repository }}" | perl -ne 'print lc')
-          TAG=sha-$(git rev-parse --short=7 HEAD)
-          VARS
-      - name: Build containers
-        run: |
-          docker build --pull -t "${REGISTRY}/${REPOSITORY_BASE}/grafana:${TAG}" - < Dockerfile.grafana
       - name: Check if secrets are available for publishing
         run: echo "SECRETS_AVAILABLE=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
-      - name: Push containers
-        if: env.SECRETS_AVAILABLE
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login "${REGISTRY}" -u ${{ github.actor }} --password-stdin
-          docker push "${REGISTRY}/${REPOSITORY_BASE}/grafana:${TAG}"
       - name: Configure AWS Credentials
         if: env.SECRETS_AVAILABLE
         uses: aws-actions/configure-aws-credentials@v1
