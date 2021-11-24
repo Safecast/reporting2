@@ -1,6 +1,3 @@
-branch-defaults:
-  docker-reporting:
-    environment: safecastreporting-dev-005
 global:
   application_name: reporting
   default_ec2_keyname: safecastapi
